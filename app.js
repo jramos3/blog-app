@@ -84,4 +84,17 @@ app.post("/blogs", (req, res) => {
     });
 });
 
+//SHOW Route
+app.get("/blogs/:id", (req, res) => {
+  const { id } = req.params;
+
+  Blog.findById(id)
+    .then(blog => {
+      res.render("show", { blog });
+    })
+    .catch(err => {
+      res.redirect("/blogs");
+    });
+});
+
 app.listen(3000, () => console.log("BlogApp started at port 3000..."));
