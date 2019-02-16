@@ -66,4 +66,22 @@ app.get("/blogs", (req, res) => {
     .catch(err => console.log(err));
 });
 
+//NEW Route
+app.get("/blogs/new", (req, res) => {
+  res.render("new");
+});
+
+//CREATE Route
+app.post("/blogs", (req, res) => {
+  const newPost = req.body.blog;
+
+  Blog.create(newPost)
+    .then(() => {
+      res.redirect("/blogs");
+    })
+    .catch(() => {
+      res.render("new");
+    });
+});
+
 app.listen(3000, () => console.log("BlogApp started at port 3000..."));
