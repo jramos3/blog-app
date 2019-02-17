@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
+const methodOverride = require("method-override");
 
 const app = express();
 
@@ -10,10 +11,12 @@ const app = express();
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(methodOverride("_method"));
 
 //--------------------------------
 //--------DATABASE SETUP----------
 //--------------------------------
+mongoose.Promise = global.Promise;
 mongoose
   .connect("mongodb://localhost:27017/blog_app", {
     useNewUrlParser: true
@@ -91,6 +94,33 @@ app.get("/blogs/:id", (req, res) => {
   Blog.findById(id)
     .then(blog => {
       res.render("show", { blog });
+    })
+    .catch(err => {
+      res.redirect("/blogs");
+    });
+});
+
+//EDIT Route
+app.get("/blogs/:id/edit", (req, res) => {
+  const { id } = req.params;
+
+  Blog.findById(id)
+    .then(blog => {
+      res.render("edit", { blog });
+    })
+    .catch(err => {
+      res.redirect("/blogs");
+    });
+});
+
+//UPDATE Route
+app.put("/blogs/:id", (req, res) => {
+  const { id } = req.params;
+  const updatedBlog = req.body.blog;
+
+  Blog.findByIdAndUpdate(id, updatedBlog)
+    .then(blog => {
+      res.redirect(`/blogs/${id}`);
     })
     .catch(err => {
       res.redirect("/blogs");
