@@ -127,4 +127,17 @@ app.put("/blogs/:id", (req, res) => {
     });
 });
 
+//DELETE Route
+app.delete("/blogs/:id", (req, res) => {
+  const { id } = req.params;
+
+  Blog.findByIdAndDelete(id)
+    .then(blog => {
+      res.redirect("/blogs");
+    })
+    .catch(err => {
+      res.redirect("/blogs");
+    });
+});
+
 app.listen(3000, () => console.log("BlogApp started at port 3000..."));

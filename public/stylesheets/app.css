@@ -9,3 +9,7 @@ i.icon {
 .blogpost-static {
   white-space: pre-wrap;
 }
+
+#delete {
+  display: inline;
+}
